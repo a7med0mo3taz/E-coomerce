@@ -1,0 +1,11 @@
+.cart{
+    background-color: #f7f9fa;
+}
+.total-number{
+    color: #21db14;
+}
+.count-btn{
+    padding: 6px 12px;
+    border: #4fa64b 1px solid;
+    background-color: #4fa64b;
+}

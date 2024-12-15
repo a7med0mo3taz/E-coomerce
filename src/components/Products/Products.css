@@ -1,0 +1,23 @@
+.card{
+    transition: 0.3s ease-out;
+    .btn{
+        background-color: #43ac43;
+        transform: translateY(200%);
+        opacity: 0%;
+        transition: 0.3s ease-out;
+    }
+    .btn:hover{
+        background-color: #377537;
+    }
+}
+.card:hover{
+    box-shadow: 1px 1px 10px #4fa74f;;
+    .btn{
+        transform: translateY(0%);
+        opacity: 100%;
+    }
+}
+
+.loadingBg{
+    background-color: #4fa64b;
+}

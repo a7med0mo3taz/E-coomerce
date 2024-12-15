@@ -1,0 +1,9 @@
+.disabled-btn{
+    color: gray;
+    border: 2px gray solid;
+    border-radius: 10px;
+    padding: 8px 16px;
+}
+.default-btn{
+    background-color: #4fa64b;
+}

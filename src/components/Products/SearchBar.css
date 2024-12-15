@@ -1,0 +1,24 @@
+.search-bar{
+    width: 972px!important;
+}
+@media (max-width: 1024px) {
+    .search-bar{
+        width: 772px!important;
+    }
+    }
+    @media (max-width: 768px) {
+        .search-bar{
+            width: 572px!important;
+        }
+    }
+    @media (max-width: 640px) {
+        .search-bar{
+            width: 372px!important;
+        }
+    }
+    @media (max-width: 640px) {
+        .search-bar{
+            width: 372px!important;
+        }
+    }
+    
