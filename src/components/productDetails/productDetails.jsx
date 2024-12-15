@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-
+import "./ProductDetails.css";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
