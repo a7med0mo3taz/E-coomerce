@@ -121,6 +121,8 @@ export default function CartContextProvider({ children }) {
                 }
             );
             window.location.href = data.session.url
+            console.log(window.location.origin);
+            
             toast.success("Checkout session created successfully!", {
                 icon: "✅",
             });
