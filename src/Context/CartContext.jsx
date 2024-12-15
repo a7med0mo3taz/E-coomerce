@@ -111,7 +111,7 @@ export default function CartContextProvider({ children }) {
         setIsLoading((prev) => ({ ...prev, checkOut: true }));
         try {
             const { data } = await axios.post(
-                `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=http://${location.origin}/`,
+                `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${window.location.origin}`,
                 { shippingAddress },
                 {
                     headers: {

@@ -58,7 +58,7 @@ function App() {
             </ProtectedRoute>
         },
         {
-          path: `${location.origin}/allorders`, element:
+          path: `/allorders`, element:
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
