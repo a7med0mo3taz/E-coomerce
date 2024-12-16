@@ -27,7 +27,9 @@ export default function Navbar() {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
-
+    const handleNavLinkClick = () => {
+        setIsMenuOpen(false); // يغلق القائمة عند النقر على رابط
+    };
     return (
         <>
             <nav className="bg-white z-50 dark:bg-gray-900 fixed w-full top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -82,22 +84,22 @@ export default function Navbar() {
                             token &&
                             <ul className="flex flex-col p-4 lg:p-0 font-medium lg:space-x-8 rtl:space-x-reverse lg:flex-row md:flex-row lg:mt-0 lg:border-0 lg:bg-white">
                                 <li>
-                                    <NavLink to={""} className="block py-2 md:px-1 nav-link text-center  md:bg-transparent focus:text-green-700 md:text-black md:p-0" aria-current="page">Home</NavLink>
+                                    <NavLink to={""}   onClick={() => handleNavLinkClick()}  className="block py-2 md:px-1 nav-link text-center  md:bg-transparent focus:text-green-700 md:text-black md:p-0" aria-current="page">Home</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={"/cart"} className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Cart</NavLink>
+                                    <NavLink to={"/cart"}  onClick={() => handleNavLinkClick()}  className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Cart</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={"/wish-list"} className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Wish list</NavLink>
+                                    <NavLink to={"/wish-list"}  onClick={() => handleNavLinkClick()}  className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Wish list</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={"/products"} className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Products</NavLink>
+                                    <NavLink to={"/products"}  onClick={() => handleNavLinkClick()}  className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Products</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={"/categories"} className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Categories</NavLink>
+                                    <NavLink to={"/categories"}  onClick={() => handleNavLinkClick()}  className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Categories</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to={"/brands"} className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Brands</NavLink>
+                                    <NavLink to={"/brands"}  onClick={() => handleNavLinkClick()}  className="block py-2 md:px-1 nav-link text-center text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent focus:text-green-700 md:hover:text-green-700 md:p-0">Brands</NavLink>
                                 </li>
                             </ul>
                         }
