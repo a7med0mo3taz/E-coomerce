@@ -4,6 +4,7 @@ import Loading from '../Loading/Loading';
 import axios from 'axios';
 import { CartContext } from '../../Context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../Context/UserContext';
 
 
 export default function Cart() {
@@ -15,7 +16,7 @@ export default function Cart() {
   usePageTitle("Cart")
   const navigate = useNavigate()
   const { deleteProduct, updateProduct, getCart, checkOutSession, clearCart, isLoading, error, numOfCartItems, totalCartPrice, cartData } = useContext(CartContext)
-
+const {token} =useContext(UserContext)
   const [cartIsLoading, setCartIsLoading] = useState(false);
   const [loadingStates, setLoadingStates] = useState({
     increment: null,
@@ -25,6 +26,8 @@ export default function Cart() {
   });
 
   useEffect(() => {
+    console.log(token);
+    
     getCart();
   }, [])
 

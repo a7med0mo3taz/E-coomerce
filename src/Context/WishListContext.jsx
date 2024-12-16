@@ -26,7 +26,7 @@ export default function WishListProvider({ children }) {
     async function getWishList() {
         setIsLoading((prev) => ({ ...prev, getWishList: true }));
         try {
-            const { data } = await axiosWishList.get();
+            const { data } = await axiosWishList.get()
             setWishListData(data.data);
             // تحديث المفضلات
             const favoriteMap = data.data.reduce((acc, product) => {

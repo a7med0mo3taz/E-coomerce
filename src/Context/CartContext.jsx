@@ -32,9 +32,9 @@ export default function CartContextProvider({ children }) {
         setIsLoading((prev) => ({ ...prev, getCart: true }));
         try {
             const { data } = await axiosCart.get();
+            setCartData(data.data);
             setNumOfCartItems(data.numOfCartItems);
             setTotalCartPrice(data.data.totalCartPrice);
-            setCartData(data.data);
         } catch (err) {
             setError((prev) => ({ ...prev, getCart: err.response?.data?.message || "Failed to fetch cart." }));
         } finally {

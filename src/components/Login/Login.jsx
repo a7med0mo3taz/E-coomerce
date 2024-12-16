@@ -22,11 +22,11 @@ export default function Login() {
             setIsLoading(true)
             const { data } = await axios.post(`https://ecommerce.routemisr.com/api/v1/auth/signin`, values)
             navigate("/")
+            setToken(data.token)
             localStorage.setItem("userToken", data.token)
             toast.success('Successfully Log in!')
-            setToken(data.token)
         } catch (error) {
-            setErrorMsg(error.response.data.message)
+            setErrorMsg(error.response.data.message) 
         }
         finally {
             setIsLoading(false)

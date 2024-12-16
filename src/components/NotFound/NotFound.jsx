@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-
+import Error from "../../assets/error.svg"
 export default function NotFound() {
     const usePageTitle = (title) => {
         useEffect(() => {
@@ -8,19 +8,15 @@ export default function NotFound() {
     };
     usePageTitle("Eror 404")
     return (
-        <div className='flex justify-center items-start m-80'>
-            <div className="flex p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-                
-                <div className="flex flex-col">
-                <div className='text-center mb-3'>
-                    <span className=" text-6xl">Not Found</span>
-                </div>
-                <div className="text-center">
-                    <span className="text-6xl">This page doesn’t exist.</span>
-                </div>
-                </div>
+        <div className='flex flex-col justify-center items-center gap-5 m-80'>
+            <div className="photo">
+                <img src={Error} alt="errorMsg" />
             </div>
-
+            <div className="text">
+                <h2 className='text-3xl '>Not Found Page</h2>
+            </div>
         </div>
+
+
     )
 }
