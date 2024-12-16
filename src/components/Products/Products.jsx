@@ -32,10 +32,12 @@ export default function Products() {
         setLoadingProductId(null);
     }
     const [isWishListLoading, setIsWishListLoading] = useState({
-        handleAddToWishList: false
+        handleAddToWishList: false,
+        hanDeleteFromWishList: false
     });
     const [wishListError, setWishListError] = useState({
-        handleAddToWishList: null
+        handleAddToWishList: null,
+        hanDeleteFromWishList: null
     });
     const [wishListData, setWishListData] = useState(null)
     const [favoriteProducts, setFavoriteProducts] = useState({});
@@ -44,37 +46,97 @@ export default function Products() {
         setIsWishListLoading((prev) => ({ ...prev, [productId]: true }));
         setLoadingFavorites((prev) => ({ ...prev, [productId]: true }));
         try {
-            const { data } = await axios.post(
-                "https://ecommerce.routemisr.com/api/v1/wishlist",
-                { productId: productId },
-                {
-                    headers: {
-                        token: localStorage.getItem("userToken"),
-                    },
-                }
-            );
-
-            setWishListData(data.data);
-            setFavoriteProducts((prev) => ({
-                ...prev,
-                [productId]: !prev[productId],
-            }));
-
-            toast.success("Successfully added to Wish List!", {
-                icon: "❤️",
-            });
+            if (favoriteProducts[productId]) {
+                // إذا كان المنتج موجود بالفعل في الـ wish list، نقوم بحذفه
+                await hanDeleteFromWishList(productId);
+            } else {
+                // إذا لم يكن المنتج في الـ wish list، نقوم بإضافته
+                const { data } = await axios.post(
+                    "https://ecommerce.routemisr.com/api/v1/wishlist",
+                    { productId: productId },
+                    {
+                        headers: {
+                            token: localStorage.getItem("userToken"),
+                        },
+                    }
+                );
+                setWishListData(data.data);
+                setFavoriteProducts((prev) => ({
+                    ...prev,
+                    [productId]: true,
+                }));
+                toast.success("Successfully added to Wish List!", {
+                    icon: "❤️",
+                });
+            }
         } catch (err) {
             setWishListError((prev) => ({
                 ...prev,
-                [productId]: err.response?.data?.message || "Failed to add product.",
+                [productId]: err.response?.data?.message || "Failed to update product.",
             }));
         } finally {
             setIsWishListLoading((prev) => ({ ...prev, [productId]: false }));
             setLoadingFavorites((prev) => ({ ...prev, [productId]: false }));
         }
     }
+    useEffect(() => {
+        const fetchFavoriteProducts = async () => {
+            try {
+                setIsWishListLoading(true);
+                setLoadingFavorites(true);
+                const { data } = await axios.get("https://ecommerce.routemisr.com/api/v1/wishlist", {
+                    headers: {
+                        token: localStorage.getItem("userToken"),
+                    },
+                });
+                const favoriteMap = data.data.reduce((acc, product) => {
+                    acc[product._id] = true;
+                    return acc;
+                }, {});
+                setFavoriteProducts(favoriteMap);
+            } catch (error) {
+                console.error("Error fetching favorite products:", error);
+            } finally {
+                setIsWishListLoading(false);
+                setLoadingFavorites(false);
+            }
+        };
 
+        fetchFavoriteProducts();
+    }, []); // This runs only once when the component mounts
 
+    async function hanDeleteFromWishList(productId) {
+        setIsWishListLoading((prev) => ({ ...prev, [productId]: true }));
+        setLoadingFavorites((prev) => ({ ...prev, [productId]: true }));
+        try {
+            const { data } = await axios.delete(
+                `https://ecommerce.routemisr.com/api/v1/wishlist/${productId}`,
+                {
+                    data: { productId: productId },
+                    headers: {
+                        token: localStorage.getItem("userToken"),
+                    },
+                }
+            );
+            setWishListData(data.data);
+            setFavoriteProducts((prev) => {
+                const updatedFavorites = { ...prev };
+                delete updatedFavorites[productId]; // إزالة المنتج من المفضلة
+                return updatedFavorites;
+            });
+            toast.success("Successfully deleted from Wish List!", {
+                icon: "💔",
+            });
+        } catch (err) {
+            setWishListError((prev) => ({
+                ...prev,
+                [productId]: err.response?.data?.message || "Failed to delete product.",
+            }));
+        } finally {
+            setIsWishListLoading((prev) => ({ ...prev, [productId]: false }));
+            setLoadingFavorites((prev) => ({ ...prev, [productId]: false }));
+        }
+    }
 
     const filteredProducts = data?.data?.data.filter((product) =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -127,11 +189,12 @@ export default function Products() {
                         {loadingFavorites[product.id] ? (
                             <div className="loadingBg px-2 py-1 rounded-lg"><i className="fa-solid fa-spinner fa-spin" style={{ color: "white" }} /></div>
                         ) : favoriteProducts[product.id] ? (
-                            <i className="fa-solid fa-heart fa-2xl" style={{ color: "red" }} />
+                            <i className="fa-solid fa-heart fa-2xl" style={{ color: "red" }} /> 
                         ) : (
-                            <i className="fa-solid fa-heart fa-2xl" style={{ color: "black" }} />
+                            <i className="fa-solid fa-heart fa-2xl" style={{ color: "black" }} /> 
                         )}
                     </button>
+
 
                 </div>
             </div>

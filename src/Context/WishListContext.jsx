@@ -8,7 +8,7 @@ export const WishListContext = createContext();
 export default function WishListProvider({ children }) {
     const [loadingFavorites, setLoadingFavorites] = useState({});
     const [favoriteProducts, setFavoriteProducts] = useState({});
-    const [isLoading, setIsLoading] = useState({
+    const [isWishListLoading, setIsWishListLoading] = useState({
         getWishList: false,
         clearWishList: false,
         deleteProduct: false,
@@ -24,7 +24,7 @@ export default function WishListProvider({ children }) {
 
     // جلب قائمة المنتجات المفضلة
     async function getWishList() {
-        setIsLoading((prev) => ({ ...prev, getWishList: true }));
+        setIsWishListLoading((prev) => ({ ...prev, getWishList: true }));
         try {
             const { data } = await axiosWishList.get()
             setWishListData(data.data);
@@ -40,22 +40,23 @@ export default function WishListProvider({ children }) {
                 getWishList: err.response?.data?.message || "Failed to fetch wish list.",
             }));
         } finally {
-            setIsLoading((prev) => ({ ...prev, getWishList: false }));
+            setIsWishListLoading((prev) => ({ ...prev, getWishList: false }));
         }
     }
 
-    // إزالة المنتج من المفضلة
+    
     async function deleteProduct(id) {
-        setIsLoading((prev) => ({ ...prev, deleteProduct: true }));
+        setLoadingFavorites((prev) => ({ ...prev, [id]: true })); 
+        setIsWishListLoading((prev) => ({ ...prev, deleteProduct: true }));
         try {
             const { data } = await axiosWishList.delete(`/${id}`);
             setWishListData(data.data);
             toast.success("Successfully deleted from Wish List!", {
-                icon: "✅",
+                icon: "💔",
             });
             setFavoriteProducts((prev) => {
                 const updatedFavorites = { ...prev };
-                delete updatedFavorites[id]; // إزالة المنتج من المفضلة
+                delete updatedFavorites[id]; 
                 return updatedFavorites;
             });
         } catch (err) {
@@ -64,14 +65,15 @@ export default function WishListProvider({ children }) {
                 deleteProduct: err.response?.data?.message || "Failed to delete product.",
             }));
         } finally {
-            setIsLoading((prev) => ({ ...prev, deleteProduct: false }));
+            setLoadingFavorites((prev) => ({ ...prev, [id]: false })); 
+            setIsWishListLoading((prev) => ({ ...prev, deleteProduct: false }));
         }
     }
 
-    // إضافة المنتج إلى المفضلة
+    
     async function addToWishList(id) {
-        setLoadingFavorites((prev) => ({ ...prev, [id]: true })); // إظهار حالة التحميل
-        setIsLoading((prev) => ({ ...prev, addToWishList: true }));
+        setLoadingFavorites((prev) => ({ ...prev, [id]: true })); 
+        setIsWishListLoading((prev) => ({ ...prev, addToWishList: true }));
         try {
             const { data } = await axiosWishList.post("", { productId: id });
             setWishListData(data.data);
@@ -80,7 +82,7 @@ export default function WishListProvider({ children }) {
             });
             setFavoriteProducts((prev) => ({
                 ...prev,
-                [id]: true, // إضافة المنتج إلى المفضلة
+                [id]: true, 
             }));
         } catch (err) {
             setError((prev) => ({
@@ -88,8 +90,8 @@ export default function WishListProvider({ children }) {
                 addToWishList: err.response?.data?.message || "Failed to add product.",
             }));
         } finally {
-            setLoadingFavorites((prev) => ({ ...prev, [id]: false })); // إخفاء حالة التحميل
-            setIsLoading((prev) => ({ ...prev, addToWishList: false }));
+            setLoadingFavorites((prev) => ({ ...prev, [id]: false })); 
+            setIsWishListLoading((prev) => ({ ...prev, addToWishList: false }));
         }
     }
 
@@ -101,7 +103,7 @@ export default function WishListProvider({ children }) {
                 deleteProduct,
                 wishListData,
                 error,
-                isLoading,
+                isWishListLoading,
                 loadingFavorites,
                 favoriteProducts,
             }}

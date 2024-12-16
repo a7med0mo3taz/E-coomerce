@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { WishListContext } from '../../Context/WishListContext';
 import { CartContext } from '../../Context/CartContext';
+import { Link } from 'react-router-dom';
 
 export default function WishList() {
   const usePageTitle = (title) => {
@@ -36,11 +37,13 @@ export default function WishList() {
               className="grid grid-cols-10 sm:grid-cols-10 md:grid-cols-10 gap-5 w-full max-w-6xl my-4 p-2 border-b"
             >
               <div className="col-span-10 md:col-span-2 md:p-4">
-                <img
+              <Link to={"/product-details/" + item.id}>
+              <img
                   src={item.imageCover}
                   className=" md:w-32 w-full max-h-full"
                   alt={item.title}
                 />
+              </Link>
               </div>
 
               <div className="col-span-10 md:col-span-8 flex justify-between items-center">

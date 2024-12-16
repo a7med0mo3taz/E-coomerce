@@ -14,15 +14,6 @@ export default function ProductDetails() {
         }, [title]);
     };
     usePageTitle("Details");
-    const { addToCart, isLoading } = useContext(CartContext);
-    const { addToWishList } = useContext(WishListContext)
-    const [isFavorite, setIsFavorite] = useState(false);
-    const sliderRef = useRef(null);
-    const handleAddToWishList = () => {
-        addToWishList(productDetails.id);
-        setIsFavorite(!isFavorite);
-    };
-
     var settings = {
         dots: false,
         infinite: true,
@@ -58,6 +49,22 @@ export default function ProductDetails() {
             }
         ]
     }
+    const { addToCart, isLoading } = useContext(CartContext);
+    const { getWishList,addToWishList, deleteProduct, favoriteProducts, loadingFavorites } = useContext(WishListContext);
+
+    const [isFavorite, setIsFavorite] = useState(false);
+    const sliderRef = useRef(null);
+
+    const handleAddToWishList = () => {
+        if (favoriteProducts[productDetails.id]) {
+            setIsFavorite(false);
+            deleteProduct(productDetails.id);
+        } else {
+            setIsFavorite(true);
+            addToWishList(productDetails.id);
+        }
+    };
+
     const { pId } = useParams();
     const [productDetails, setProductDetails] = useState(null);
 
@@ -68,20 +75,33 @@ export default function ProductDetails() {
 
     useEffect(() => {
         getProductDetails();
-    }, []);
+        getWishList();
+    }, [pId]);
+
+    useEffect(() => {
+        if (productDetails && productDetails.id && favoriteProducts) {
+            
+            const isProductFavorite = favoriteProducts[productDetails.id];
+            console.log("Is Product Favorite:", isProductFavorite);
+            console.log("Updated Favorite Products:", favoriteProducts);
+            setIsFavorite(!!isProductFavorite); 
+        }
+    }, [productDetails, favoriteProducts]);
+
+
+
 
     return (
         <>
-            <div className="flex justify-center items-start mt-20 px-10 ">
+            <div className="flex justify-center items-start mt-20 px-10">
                 {productDetails ? (
                     <div className="grid grid-cols-1 sm:grid-cols-10 md:grid-cols-10 gap-5 w-full max-w-6xl">
-
                         <div className="col-span-4">
                             {productDetails?.images.length > 1 ? (
                                 <>
                                     <Slider ref={sliderRef} {...settings}>
                                         {productDetails.images.map((img, index) => (
-                                            <div key={index}>
+                                            <div key={index} className="w-full">
                                                 <img
                                                     src={img}
                                                     className="w-full h-auto"
@@ -117,7 +137,7 @@ export default function ProductDetails() {
                             <h2 className="text-4xl text-start mb-2">{productDetails.title}</h2>
                             <p className="mb-4 text-start">{productDetails.description}</p>
                             <div className="flex justify-between items-center mb-4">
-                                <span className='price'>{productDetails.price} EGY</span>
+                                <span className="price">{productDetails.price} EGY</span>
                                 <div>
                                     <i className="fa-solid fa-star fa-lg" style={{ color: '#FFD43B' }} />
                                     <span className="bg-blue-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded ms-3">
@@ -128,7 +148,7 @@ export default function ProductDetails() {
                             <div className="flex items-center justify-between gap-5">
                                 <button
                                     onClick={() => addToCart(productDetails.id)}
-                                    className="text-white w-full bg-green-500 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                    className="text-white w-full loadingBg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                                 >
                                     {isLoading.addToCart ? (
                                         <i className="fa-solid fa-spinner fa-spin"></i>
@@ -137,9 +157,10 @@ export default function ProductDetails() {
                                     )}
                                 </button>
 
-
                                 <button onClick={handleAddToWishList} className="cursor-pointer">
-                                    {isFavorite ? (
+                                    {loadingFavorites[productDetails.id] ? (
+                                        <div className="loadingBg px-2 py-1 rounded-lg"><i className="fa-solid fa-spinner fa-spin" style={{ color: "white" }} /></div>
+                                    ) : isFavorite ? (
                                         <i className="fa-solid fa-heart fa-2xl" style={{ color: "red" }} />
                                     ) : (
                                         <i className="fa-solid fa-heart fa-2xl" style={{ color: "black" }} />
