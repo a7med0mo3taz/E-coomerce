@@ -1,16 +1,16 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Loading from '../Loading/Loading';
 
-export default function SubCategories({ categoryId, selectedCategoryName }) {
-    const [subCategories, setSubCategories] = useState([]);  // حالة لتخزين الـ subcategories
-    const [loading, setLoading] = useState(false);  // حالة لتحميل البيانات
-    const [error, setError] = useState(null);  // حالة لخطأ في تحميل البيانات
+export default function SubCategories({ categoryId, selectedCategoryName, onSubCategoriesLoaded }) {
+    const [subCategories, setSubCategories] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const subCategoriesRef = useRef(null);
 
-    // استخدام useEffect لجلب الـ subcategories عند تغيير categoryId
     useEffect(() => {
         if (categoryId) {
-            console.log("Fetching subcategories for category ID:", categoryId);  // تحقق من الـ categoryId المستلم
+            console.log("Fetching subcategories for category ID:", categoryId);
             fetchSubCategories(categoryId);
         }
     }, [categoryId]);
@@ -19,7 +19,7 @@ export default function SubCategories({ categoryId, selectedCategoryName }) {
         try {
             setLoading(true);
             const response = await axios.get(`https://ecommerce.routemisr.com/api/v1/categories/${categoryId}/subcategories`);
-            setSubCategories(response.data.data);  // تحديث الـ state بـ subcategories
+            setSubCategories(response.data.data);
             console.log("Subcategories fetched:", response.data.data);
         } catch (error) {
             console.error("Error fetching subcategories:", error);
@@ -27,9 +27,10 @@ export default function SubCategories({ categoryId, selectedCategoryName }) {
         } finally {
             setLoading(false);
         }
+        if (onSubCategoriesLoaded) {
+            onSubCategoriesLoaded();
+        }
     }
-
-    // دالة لعرض الـ subcategories
     function renderSubCategories() {
         if (loading) {
             return <Loading />;

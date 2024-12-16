@@ -1,10 +1,11 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Loading from '../Loading/Loading';
 import { useQuery } from '@tanstack/react-query';
 import SubCategories from '../SubCategories/SubCategories';  // استيراد كومبوننت SubCategories
 
 export default function Categories() {
+    const subCategoriesRef = useRef(null);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [selectedCategoryName, setSelectedCategoryName] = useState(null); 
 
@@ -27,7 +28,27 @@ export default function Categories() {
         }
     }, [data]);
 
-  
+    function handleCategoryClick(category) {
+        setSelectedCategoryId(category._id);
+        setSelectedCategoryName(category.name);
+
+        // تحريك الشاشة إلى الـ subcategories
+        // if (subCategoriesRef.current) {
+        //     subCategoriesRef.current.scrollIntoView({ behavior: 'smooth' });
+        // }
+        if (subCategoriesRef.current) {
+            // التحرك إلى بداية الـ subcategories
+            subCategoriesRef.current.scrollIntoView({ behavior: 'smooth' });
+    
+            // الانتظار قليلاً ثم التحرك إلى نهاية الصفحة
+            setTimeout(() => {
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: 'smooth',
+                });
+            }, 500); // الانتظار نصف ثانية (يمكنك تعديله)
+        }
+    }
     function renderCategories() {
         return data.data.data.map((category) => (
             <div
@@ -36,6 +57,7 @@ export default function Categories() {
                 onClick={() => {
                     setSelectedCategoryId(category._id);
                     setSelectedCategoryName(category.name);
+                    handleCategoryClick(category)
                 }}
             >
                 <div className="w-full overflow-hidden flex flex-col justify-center items-center bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -54,6 +76,14 @@ export default function Categories() {
         ));
     }
 
+    function handleSubCategoriesLoaded() {
+        // تحريك الشاشة إلى نهاية الصفحة
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth',
+        });
+    }
+    
     return (
         <>
             {isLoading && <Loading />}
@@ -65,12 +95,15 @@ export default function Categories() {
             ) : (
                 <p className="text-center text-gray-500">No categories found.</p>
             )}
-
-            {/* عرض subcategories أسفل الكاتيجوريز عند تحديد category */}
+    
             {selectedCategoryName && (
-                <SubCategories categoryId={selectedCategoryId} selectedCategoryName={selectedCategoryName} />
+                <SubCategories
+                    categoryId={selectedCategoryId}
+                    selectedCategoryName={selectedCategoryName}
+                    onSubCategoriesLoaded={handleSubCategoriesLoaded} // تمرير الدالة هنا
+                />
             )}
-
         </>
     );
+    
 }
