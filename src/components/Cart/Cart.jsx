@@ -26,8 +26,6 @@ const {token} =useContext(UserContext)
   });
 
   useEffect(() => {
-    console.log(token);
-    
     getCart();
   }, [])
 
