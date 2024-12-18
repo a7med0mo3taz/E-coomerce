@@ -17,7 +17,7 @@ import UpdatePassword from './components/UpdatePassword/UpdatePassword'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 import UserContextProvider from './Context/UserContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools're
 import CartContextProvider from './Context/CartContext'
 import toast, { Toaster } from 'react-hot-toast';
 import CheckOut from './components/CheckOut/CheckOut'

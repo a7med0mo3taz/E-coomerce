@@ -38,7 +38,7 @@ export default function Register() {
         email: Yup.string().email().required().matches(/^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/, "Email is not valid"),
         password: Yup.string().required().matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/, `Password requirements : At least one uppercase letter (A-Z) - At least one lowercase letter (a-z) - At least one digit (0-9) - At least one special character (#, ?, !, @, $, %, ^, &, *, -) - At least 8 characters in length.`),
         rePassword: Yup.string().required("Re-password is required").oneOf([Yup.ref("password"), null], "Passwords must match"),
-        Phone: Yup.string().required().matches(/^01[0-2][0-9]{8}$/, "Phone number is not valid"),
+        Phone: Yup.string().required().matches(/^(010|011|012|015)[0-9]{8}$/, "Phone number is not valid"),
     });
 
 
